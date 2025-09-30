@@ -1,0 +1,43 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: full_stack_dev
+      POSTGRES_USER: full_stack_user
+      POSTGRES_PASSWORD: password123
+    volumes:
+      - "postgres:/var/lib/postgresql/data"
+
+  app:
+    build: .
+    container_name: node_app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+    environment:
+      NODE_ENV: production
+    volumes:
+      - .:/app
+    command: [ "node", "dist/server.js" ]
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    ports:
+      - "8080:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    depends_on:
+      - postgres
+
+volumes:
+  postgres:
