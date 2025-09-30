@@ -7,7 +7,8 @@
     "build": "tsc --outDir dist",
     "start": "node dist/server.js",
     "watch": "tsc-watch --esModuleInterop src/server.ts --outDir ./dist --onSuccess \"node ./dist/server.js\"",
-    "test": "jasmine-ts --random=false",
+    "db:test:prepare": "db-migrate up -e test",
+    "test": "cross-env NODE_ENV=test npm run db:test:prepare && jasmine-ts --random=false",
     "test1": "jasmine-ts --config=jasmine.json",
     "tsc": "tsc"
   },
@@ -31,6 +32,7 @@
     "@types/jasmine": "^3.10.18",
     "@types/pg": "^7.14.11",
     "@types/supertest": "^6.0.3",
+    "cross-env": "^7.0.3",
     "jasmine": "^3.99.0",
     "jasmine-spec-reporter": "^6.0.0",
     "jasmine-ts": "^0.4.0",
